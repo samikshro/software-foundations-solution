@@ -1486,15 +1486,15 @@ Fixpoint bin_to_nat (m:bin) : nat :=
         first converting it to unary and then incrementing. *)
 
 Example test_bin_incr1: (incr (B (B (B Z)))) = A (A (A (B Z))).
-Proof. simpl. reflexivity. Qed.
+Proof. reflexivity. Qed.
 Example test_bin_incr2: (incr (B (A (A (B Z))))) = A (B (A (B Z))).
-Proof. simpl. reflexivity. Qed.
+Proof. reflexivity. Qed.
 Example test_bin_to_nat1: (bin_to_nat (B (B (B Z)))) = 7.
-Proof. simpl. reflexivity. Qed.
+Proof. reflexivity. Qed.
 Example test_bin_to_nat2: (bin_to_nat (B (A (A (B Z))))) = 9.
-Proof. simpl. reflexivity. Qed.
+Proof. reflexivity. Qed.
 Example test_bin_to_nat3: (bin_to_nat (A (B (A (B (A (B (A (B Z))))))))) = 170.
-Proof. simpl. reflexivity. Qed.
+Proof. reflexivity. Qed.
 
 (* Do not modify the following line: *)
 Definition manual_grade_for_binary : option (nat*string) := None.
