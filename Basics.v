@@ -1463,11 +1463,19 @@ Inductive bin : Type :=
         for binary numbers, and a function [bin_to_nat] to convert
         binary numbers to unary numbers. *)
 
-Fixpoint incr (m:bin) : bin
-  (* REPLACE THIS LINE WITH ":= _your_definition_ ." *). Admitted.
+Fixpoint incr (m:bin) : bin :=
+  match m with
+  | Z => B Z
+  | A m' => B m'
+  | B m' => A (incr m')
+  end.
 
-Fixpoint bin_to_nat (m:bin) : nat
-  (* REPLACE THIS LINE WITH ":= _your_definition_ ." *). Admitted.
+Fixpoint bin_to_nat (m:bin) : nat :=
+  match m with
+  | Z => O
+  | A m' => mult (bin_to_nat m') (S (S O))
+  | B m' => S (mult (bin_to_nat m') (S (S O)))
+  end.
 
 (**    (b) Write five unit tests [test_bin_incr1], [test_bin_incr2], etc.
         for your increment and binary-to-unary functions.  (A "unit
@@ -1477,7 +1485,16 @@ Fixpoint bin_to_nat (m:bin) : nat
         then converting it to unary should yield the same result as
         first converting it to unary and then incrementing. *)
 
-(* FILL IN HERE *)
+Example test_bin_incr1: (incr (B (B (B Z)))) = A (A (A (B Z))).
+Proof. simpl. reflexivity. Qed.
+Example test_bin_incr2: (incr (B (A (A (B Z))))) = A (B (A (B Z))).
+Proof. simpl. reflexivity. Qed.
+Example test_bin_to_nat1: (bin_to_nat (B (B (B Z)))) = 7.
+Proof. simpl. reflexivity. Qed.
+Example test_bin_to_nat2: (bin_to_nat (B (A (A (B Z))))) = 9.
+Proof. simpl. reflexivity. Qed.
+Example test_bin_to_nat3: (bin_to_nat (A (B (A (B (A (B (A (B Z))))))))) = 170.
+Proof. simpl. reflexivity. Qed.
 
 (* Do not modify the following line: *)
 Definition manual_grade_for_binary : option (nat*string) := None.
