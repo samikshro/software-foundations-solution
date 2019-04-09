@@ -609,6 +609,14 @@ Definition manual_grade_for_plus_comm_informal : option (nat*string) := None.
 
     [] *)
 
+Theorem eqb_refl : forall n : nat,
+  true = (n =? n).
+Proof.
+  intros n. induction n as [| n' IHn'].
+  - reflexivity.
+  - simpl. rewrite <- IHn'. reflexivity.
+Qed.
+
 (* ################################################################# *)
 (** * More Exercises *)
 
