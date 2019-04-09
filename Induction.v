@@ -581,7 +581,31 @@ Definition manual_grade_for_plus_comm_informal : option (nat*string) := None.
 
     Theorem: [true = n =? n] for any [n].
 
-    Proof: (* FILL IN HERE *)
+    Proof:
+    수학적 귀납법을 이용하여 위 식이 성립함을 증명한다.
+
+    - 먼저  n = 0일 때,
+
+        true = (0 =? 0)
+
+      이고 0 =? 0 을 계산하면 true이므로 등식이 성립한다.
+
+    - 다음으로 n = n'일 때 true = (n' =? n')이 성립한다고 가정하고
+      n = S n'일 때도 성립함을 보인다.
+
+        true = (S n' =? S n')
+
+      에서 =? 연산의 정의에 의해 (S n' =? S n') = (n' =? n') 이므로
+
+        true = (n' =? n')
+
+      으로 나타낼 수 있다. 이는 가정의 등식과 일치하므로 등식이 성립한다.
+
+    따라서 모든 자연수 n에 대하여
+
+      true = (n =? n)
+
+    이 성립한다.
 
     [] *)
 
