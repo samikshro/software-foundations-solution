@@ -628,17 +628,33 @@ Qed.
 Theorem plus_swap : forall n m p : nat,
   n + (m + p) = m + (n + p).
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros n m p. rewrite plus_assoc. rewrite plus_assoc.
+  assert (H: n + m = m + n).
+  { rewrite plus_comm. reflexivity. }
+  rewrite H. reflexivity.
+Qed.
 
 (** Now prove commutativity of multiplication.  (You will probably
     need to define and prove a separate subsidiary theorem to be used
     in the proof of this one.  You may find that [plus_swap] comes in
     handy.) *)
 
+Theorem mult_n_Sm : forall n m : nat,
+  n + (n * m) = n * (S m).
+Proof.
+   intros n m. induction n as [| n' IHn'].
+   - reflexivity.
+   - simpl. rewrite plus_swap. rewrite IHn'. reflexivity.
+Qed.
+
 Theorem mult_comm : forall m n : nat,
   m * n = n * m.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros m n. induction m as [| m' IHm'].
+  - rewrite mult_0_r. reflexivity.
+  - simpl. rewrite IHm'. rewrite mult_n_Sm. reflexivity.
+Qed.
+
 (** [] *)
 
 (** **** Exercise: 3 stars, standard, optional (more_exercises)  
