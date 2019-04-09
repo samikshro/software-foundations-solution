@@ -270,7 +270,7 @@ Qed.
     Briefly explain the difference between the tactics [destruct]
     and [induction].
 
-(* FILL IN HERE *)
+(* destruct\ub294 \ub2e8\uc21c\ud55c \ucf00\uc774\uc2a4 \ubd84\ub958\uc9c0\ub9cc induction\uc740 \uc218\ud559\uc801 \uadc0\ub0a9\ubc95\uc758 \uc544\uc774\ub514\uc5b4\ub300\ub85c \uc9c4\ud589\ud560 \uc218 \uc788\ub2e4 *)
 *)
 
 (* Do not modify the following line: *)
