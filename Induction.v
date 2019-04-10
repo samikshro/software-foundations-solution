@@ -846,8 +846,11 @@ Definition manual_grade_for_binary_commute : option (nat*string) := None.
     (a) First, write a function to convert natural numbers to binary
         numbers. *)
 
-Fixpoint nat_to_bin (n:nat) : bin
-  (* REPLACE THIS LINE WITH ":= _your_definition_ ." *). Admitted.
+Fixpoint nat_to_bin (n:nat) : bin :=
+  match n with
+  | 0 => Z
+  | S n' => incr (nat_to_bin n')
+  end.
 
 (** Prove that, if we start with any [nat], convert it to binary, and
     convert it back, we get the same [nat] we started with.  (Hint: If
@@ -855,9 +858,14 @@ Fixpoint nat_to_bin (n:nat) : bin
     may need to prove a subsidiary lemma showing how such functions
     relate to [nat_to_bin].) *)
 
+(* 위 힌트의 의도가 파악되지 않았습니다. *)
+
 Theorem nat_bin_nat : forall n, bin_to_nat (nat_to_bin n) = n.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros n. induction n as [| n' IHn'].
+  - reflexivity.
+  - simpl. rewrite bin_to_nat_pres_incr. rewrite IHn'. reflexivity.
+Qed.
 
 (* Do not modify the following line: *)
 Definition manual_grade_for_binary_inverse_a : option (nat*string) := None.
@@ -868,7 +876,18 @@ Definition manual_grade_for_binary_inverse_a : option (nat*string) := None.
         the same number we started with.  However, this is not the
         case!  Explain (in a comment) what the problem is. *)
 
-(* FILL IN HERE *)
+(*
+  반례:
+  예컨대 bin의 정의에 의해 A (A (A Z))도 bin 타입이다.
+  이때 bin_to_nat, nat_to_bin을 순차적으로 적용하면,
+
+    nat_to_bin (bin_to_nat (A (A (A Z))))
+    = nat_to_bin 0
+    = Z
+    =/= A (A (A Z))
+
+  따라서 어떤 bin타입 b는 nat_to_bin (bin_to_nat b) =/= b 를 만족한다.
+ *)
 
 (* Do not modify the following line: *)
 Definition manual_grade_for_binary_inverse_b : option (nat*string) := None.
@@ -885,7 +904,42 @@ Definition manual_grade_for_binary_inverse_b : option (nat*string) := None.
         proof -- that will allow the main proof to make progress.) Don't
         define thi using nat_to_bin and bin_to_nat! *)
 
-(* FILL IN HERE *)
+Fixpoint normalize (m:bin) : bin :=
+  match m with
+  | Z => Z
+  | A m' => let nm := normalize m' in
+            match nm with
+            | Z => Z
+            | _ => A nm
+            end
+  | B m' => B (normalize m')
+  end.
+
+Theorem nat_to_bin_double_Sn : forall n : nat,
+  nat_to_bin (S n + S n) = A (incr (nat_to_bin n)).
+Proof.
+  intros n. induction n as [| n' IHn'].
+  - reflexivity.
+  - simpl. simpl in IHn'. rewrite <- plus_n_Sm. simpl. rewrite IHn'. reflexivity.
+Qed.
+
+Theorem bin_nat_bin_eq_norm_bin : forall m : bin,
+  nat_to_bin (bin_to_nat m) = normalize m.
+Proof.
+  intros m.
+  induction m as [| m' IHm' | m'' IHm''].
+  - reflexivity.
+  - simpl. rewrite <- IHm'. destruct (bin_to_nat m') as [| n'].
+    + reflexivity.
+    + rewrite <- plus_n_O. rewrite -> nat_to_bin_double_Sn. simpl.
+      destruct (nat_to_bin n').
+      * reflexivity.
+      * reflexivity.
+      * reflexivity.
+  - simpl. rewrite <- IHm''. destruct (bin_to_nat m'') as [| n'].
+    + reflexivity.
+    + rewrite <- plus_n_O. rewrite -> nat_to_bin_double_Sn. reflexivity.
+Qed.
 
 (* Do not modify the following line: *)
 Definition manual_grade_for_binary_inverse_c : option (nat*string) := None.
