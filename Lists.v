@@ -941,8 +941,7 @@ Qed.
 (** **** Exercise: 1 star, standard (count_member_nonzero)  *)
 Theorem count_member_nonzero : forall (s : bag),
   1 <=? (count 1 (1 :: s)) = true.
-Proof.
-  (* FILL IN HERE *) Admitted.
+Proof. reflexivity. Qed.
 (** [] *)
 
 (** The following lemma about [leb] might help you in the next exercise. *)
