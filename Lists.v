@@ -342,24 +342,39 @@ Proof. reflexivity. Qed.
     of both lists at the same time.  One possible solution involves
     defining a new kind of pairs, but this is not the only way.)  *)
 
-Fixpoint alternate (l1 l2 : natlist) : natlist
-  (* REPLACE THIS LINE WITH ":= _your_definition_ ." *). Admitted.
+(*
+Fixpoint alternate (l1 l2 : natlist) : natlist :=
+  match l1 with
+  | nil => l2
+  | h :: t => h :: alternate l2 t
+  end.
+(* Cannot guess decreasing argument of fix. *)
+*)
+
+Fixpoint alternate (l1 l2 : natlist) : natlist :=
+  match l1 with
+  | nil => l2
+  | h :: t => match l2 with
+              | nil => l1
+              | h' :: t' => h :: h' :: alternate t t'
+              end
+  end.
 
 Example test_alternate1:
   alternate [1;2;3] [4;5;6] = [1;4;2;5;3;6].
-  (* FILL IN HERE *) Admitted.
+Proof. reflexivity. Qed.
 
 Example test_alternate2:
   alternate [1] [4;5;6] = [1;4;5;6].
-  (* FILL IN HERE *) Admitted.
+Proof. reflexivity. Qed.
 
 Example test_alternate3:
   alternate [1;2;3] [4] = [1;4;2;3].
-  (* FILL IN HERE *) Admitted.
+Proof. reflexivity. Qed.
 
 Example test_alternate4:
   alternate [] [20;30] = [20;30].
-  (* FILL IN HERE *) Admitted.
+Proof. reflexivity. Qed.
 (** [] *)
 
 (* ----------------------------------------------------------------- *)
