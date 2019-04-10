@@ -803,7 +803,35 @@ Qed.
     definitions to make the property easier to prove, feel free to
     do so! *)
 
-(* FILL IN HERE *)
+Inductive bin : Type :=
+  | Z
+  | A (n : bin)
+  | B (n : bin).
+
+Fixpoint incr (m:bin) : bin :=
+  match m with
+  | Z => B Z
+  | A m' => B m'
+  | B m' => A (incr m')
+  end.
+
+Fixpoint bin_to_nat (m:bin) : nat :=
+  match m with
+  | Z => O
+  | A m' => mult (S (S O)) (bin_to_nat m')
+  | B m' => S (mult (S (S O)) (bin_to_nat m'))
+  end.
+
+Theorem bin_to_nat_pres_incr : forall m : bin,
+  bin_to_nat (incr m) = S (bin_to_nat m).
+Proof.
+  intros m. induction m as [| m' IHm' | m'' IHm''].
+  - reflexivity.
+  - reflexivity.
+  - simpl. rewrite IHm''.
+    rewrite <- plus_n_O. rewrite <- plus_n_O. simpl. rewrite <- plus_n_Sm. reflexivity.
+Qed.
+
 
 (* Do not modify the following line: *)
 Definition manual_grade_for_binary_commute : option (nat*string) := None.
