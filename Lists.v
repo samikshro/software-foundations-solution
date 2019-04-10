@@ -508,12 +508,23 @@ Proof. reflexivity. Qed.
     requires techniques you haven't learned yet.  Feel free to ask for
     help if you get stuck! *)
 
-(*
-Theorem bag_theorem : ...
+(* my_bag_theorem *)
+Theorem incr_nat_add_count : forall n k:nat, forall s:bag,
+  count n s = k -> count n (add n s) = k + 1.
 Proof.
-  ...
+  intros n k s. induction s as [| h].
+  - intros H. destruct n.
+    + simpl. rewrite <- H. reflexivity.
+    + simpl. rewrite <- H. rewrite <- eqb_refl. reflexivity.
+  - destruct n.
+    + simpl. intros H. destruct (h =? 0).
+      * rewrite H. rewrite plus_comm. reflexivity.
+      * rewrite H. rewrite plus_comm. reflexivity.
+    + simpl. intros H. rewrite <- eqb_refl. destruct (h =? S n).
+      * rewrite H. rewrite plus_comm. reflexivity.
+      * rewrite H. rewrite plus_comm. reflexivity.
 Qed.
-*)
+
 
 (* Do not modify the following line: *)
 Definition manual_grade_for_bag_theorem : option (nat*string) := None.
