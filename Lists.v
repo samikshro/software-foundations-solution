@@ -975,9 +975,24 @@ Qed.
     involving the functions [count] and [sum], and prove it using
     Coq.  (You may find that the difficulty of the proof depends on
     how you defined [count]!) *)
-(* FILL IN HERE 
 
-    [] *)
+Theorem bag_count_sum_split : forall n, forall s1 s2:bag,
+  count n (sum s1 s2) = count n s1 + count n s2.
+Proof.
+  intros n s1 s2. induction s1 as [| s' l' IHl'].
+  - destruct n.
+    + reflexivity.
+    + reflexivity.
+  - destruct n.
+    + simpl. destruct s'.
+      * simpl. rewrite IHl'. reflexivity.
+      * simpl. rewrite IHl'. reflexivity.
+    + simpl. destruct s'.
+      * simpl. rewrite IHl'. reflexivity.
+      * simpl. rewrite IHl'. destruct (s' =? n).
+        -- reflexivity.
+        -- reflexivity.
+Qed.
 
 (** **** Exercise: 4 stars, advanced (rev_injective)  
 
