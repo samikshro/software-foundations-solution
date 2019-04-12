@@ -424,7 +424,7 @@ Lemma app_length : forall (X:Type) (l1 l2 : list X),
 Proof.
   intros X l1 l2. induction l1 as [| h l1' IHl1'].
   - reflexivity.
-  - simpl. rewrite IHli'. reflexivity.
+  - simpl. rewrite IHl1'. reflexivity.
 Qed.
 
 (** [] *)
@@ -436,12 +436,19 @@ Qed.
 Theorem rev_app_distr: forall X (l1 l2 : list X),
   rev (l1 ++ l2) = rev l2 ++ rev l1.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros X l1 l2. induction l1 as [| h l1' IHl1'].
+  - simpl. rewrite app_nil_r. reflexivity.
+  - simpl. rewrite IHl1'. rewrite app_assoc. reflexivity.
+Qed.
 
 Theorem rev_involutive : forall X : Type, forall l : list X,
   rev (rev l) = l.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros X l. induction l as [| h l' IHl'].
+  - reflexivity.
+  - simpl. rewrite rev_app_distr. rewrite IHl'. reflexivity.
+Qed.
+
 (** [] *)
 
 (* ================================================================= *)
