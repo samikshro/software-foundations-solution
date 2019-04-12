@@ -1075,15 +1075,21 @@ Qed.
     We can also define [map] in terms of [fold].  Finish [fold_map]
     below. *)
 
-Definition fold_map {X Y: Type} (f: X -> Y) (l: list X) : list Y
-  (* REPLACE THIS LINE WITH ":= _your_definition_ ." *). Admitted.
+Definition fold_map {X Y: Type} (f: X -> Y) (l: list X) : list Y :=
+  fold (fun n acc => f n :: acc) l [].
 
 (** Write down a theorem [fold_map_correct] in Coq stating that
    [fold_map] is correct, and prove it.  (Hint: again, remember that
    [reflexivity] simplifies expressions a bit more aggressively than
    [simpl].) *)
 
-(* FILL IN HERE *)
+Theorem fold_map_correct : forall X Y (f: X -> Y)(l : list X),
+  fold_map f l = map f l.
+Proof.
+  intros X Y f l. induction l as [| h l' IHl'].
+  - reflexivity.
+  - simpl. rewrite <- IHl'. reflexivity.
+Qed.
 
 (* Do not modify the following line: *)
 Definition manual_grade_for_fold_map : option (nat*string) := None.
