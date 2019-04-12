@@ -930,7 +930,62 @@ Proof. reflexivity. Qed.
     situation where it would be useful for [X] and [Y] to be
     different? *)
 
-(* FILL IN HERE *)
+(*
+  eg1: Insertion Sort에 활용할 수 있다. (nat -> list nat -> list nat)
+  eg2: 아래와 같이 활용할 수 있다. *)
+
+Inductive dir : Type :=
+  | Up
+  | Right
+  | Down
+  | Left.
+
+Inductive dir_cmd : Type :=
+  | Clockwise
+  | Counterclockwise
+  | Reverse
+  | Stay.
+
+Definition instruct_dir (c:dir_cmd) (d:dir) : dir :=
+  match c with
+  | Clockwise => match d with
+                 | Up => Right
+                 | Right => Down
+                 | Down => Left
+                 | Left => Up
+                 end
+  | Counterclockwise => match d with
+                        | Up => Left
+                        | Right => Up
+                        | Down => Right
+                        | Left => Down
+                        end
+  | Reverse => match d with
+               | Up => Down
+               | Right => Left
+               | Down => Up
+               | Left => Right
+               end
+  | Stay => d
+  end.
+
+Definition anti_instruct_dir (c:dir_cmd) (d:dir) : dir :=
+  match c with
+  | Clockwise => instruct_dir Counterclockwise d
+  | Counterclockwise => instruct_dir Clockwise d
+  | _ => instruct_dir c d
+  end.
+
+(* 이때 anti_instruct_dir을 fold함으로써 일련의 지시사항 이후의 디렉션의 상태의 지시 이전의
+   초깃값을 알아낼 수 있다. *)
+
+Example anti_dir_example1 :
+  fold anti_instruct_dir [Clockwise; Clockwise; Clockwise; Clockwise] Left = Left.
+Proof. reflexivity. Qed.
+
+Example anti_dir_example2 :
+  fold anti_instruct_dir [Counterclockwise; Reverse; Stay; Clockwise] Up = Down.
+Proof. reflexivity. Qed.
 
 (* Do not modify the following line: *)
 Definition manual_grade_for_fold_types_different : option (nat*string) := None.
