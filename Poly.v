@@ -508,17 +508,27 @@ Fixpoint combine {X Y : Type} (lx : list X) (ly : list Y)
   | x :: tx, y :: ty => (x, y) :: (combine tx ty)
   end.
 
+Check @combine.
+Compute (combine [1;2] [false;false;true;true]).
+
 (** **** Exercise: 1 star, standard, optional (combine_checks)  
 
     Try answering the following questions on paper and
     checking your answers in Coq:
     - What is the type of [combine] (i.e., what does [Check
       @combine] print?)
+
+      @combine
+           : forall X Y : Type, list X -> list Y -> list (X * Y)
+
     - What does
 
         Compute (combine [1;2] [false;false;true;true]).
 
-      print? 
+      print?
+
+      = [(1, false); (2, false)]
+      : list (nat * bool)
 
     [] *)
 
@@ -532,13 +542,17 @@ Fixpoint combine {X Y : Type} (lx : list X) (ly : list Y)
     given unit test. *)
 
 Fixpoint split {X Y : Type} (l : list (X*Y))
-               : (list X) * (list Y)
-  (* REPLACE THIS LINE WITH ":= _your_definition_ ." *). Admitted.
+               : (list X) * (list Y) :=
+  match l with
+  | [] => ([], [])
+  | (f, s) :: t => let res := split t in
+                       (f :: (fst res), s :: (snd res))
+  end.
 
 Example test_split:
   split [(1,false);(2,false)] = ([1;2],[false;false]).
-Proof.
-(* FILL IN HERE *) Admitted.
+Proof. reflexivity. Qed.
+
 (** [] *)
 
 (* ================================================================= *)
