@@ -280,7 +280,8 @@ Example injection_ex3 : forall (X : Type) (x y z : X) (l j : list X),
   y :: l = x :: j ->
   x = y.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros X x y z l j eq1 eq2. injection eq2 as H1 H2. symmetry. apply H1.
+Qed.
 (** [] *)
 
 (** So much for injectivity of constructors.  What about disjointness?
@@ -352,7 +353,8 @@ Example discriminate_ex3 :
     x :: y :: l = [] ->
     x = z.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros X x y z l j contra. discriminate contra.
+Qed.
 (** [] *)
 
 (** The injectivity of constructors allows us to reason that
