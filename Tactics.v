@@ -1106,7 +1106,14 @@ Qed.
 Theorem eqb_sym : forall (n m : nat),
   (n =? m) = (m =? n).
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros n. induction n.
+  - intros m. destruct m.
+    + reflexivity.
+    + reflexivity.
+  - intros m. destruct m.
+    + reflexivity.
+    + simpl. apply IHn.
+Qed.
 (** [] *)
 
 (** **** Exercise: 3 stars, advanced, optional (eqb_sym_informal)  
