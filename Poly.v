@@ -1162,7 +1162,66 @@ Qed.
 
    forall X n l, length l = n -> @nth_error X l n = None
 *)
-(* FILL IN HERE *)
+
+(*
+
+  수학적 귀납법을 이용하여 위 식이 성립함을 증명한다.
+
+      - 먼저  l이 빈 리스트일 때,
+
+	        length l = length [] = 0
+
+	      이다. 때문에
+
+	        nth_error [ ] 0 = None
+
+	      이 성립하므로 전체 명제는 참이다.
+
+
+      - 다음으로 l = l'일 때
+
+          length l' = n1 -> nth_error l' n1 = None
+
+        가 성립한다고 가정하고 l = h :: l' 일 때
+
+          length (h :: l') = n2 -> nth_error (h:: l') n2 = None
+
+        도 성립함을 보인다.
+
+        정의에 의해
+
+          nth_error (h:: l') n2
+          = if n2 =? 0 then Some h else nth_error l' (pred n2)
+
+        이때
+
+          length (h :: l') = n2 > 0
+
+        이 필연적으로 성립하므로
+
+          nth_error (h:: l') n2 = nth_error l' (pred n2)
+
+        이다. 또한
+
+          pred n2
+          = pred (length (h :: l'))
+          = length l'
+          = n1
+
+        이므로
+
+          nth_error l' (pred n2) = nth_error l' n1
+
+        이 된다. 가정에 의해
+
+          nth_error l' n1 = None
+
+        이다. 그러므로 l = h :: l' 일 때도 명제는 참이다.
+
+    따라서 모든 리스트 l에 대하여
+    위 명제는 참이다.
+
+*)
 
 (* Do not modify the following line: *)
 Definition manual_grade_for_informal_proof : option (nat*string) := None.
