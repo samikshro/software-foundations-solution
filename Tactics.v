@@ -1134,7 +1134,10 @@ Theorem eqb_trans : forall n m p,
   m =? p = true ->
   n =? p = true.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros n m p eq1 eq2. apply eqb_true in eq1. apply eqb_true in eq2.
+  rewrite eq1. rewrite eq2. symmetry. apply eqb_refl.
+Qed.
+
 (** [] *)
 
 (** **** Exercise: 3 stars, advanced (split_combine)  
