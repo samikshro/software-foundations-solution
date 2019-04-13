@@ -918,12 +918,33 @@ Fixpoint split {X Y : Type} (l : list (X*Y))
 (** Prove that [split] and [combine] are inverses in the following
     sense: *)
 
+(* 내가 너무 어렵게 증명한 것이 아닌지....? *)
+
+Lemma list_cons_eq : forall X (l1 l2 : list X) (x : X),
+  l1 = l2 -> x :: l1 = x :: l2.
+Proof.
+  intros X l1 l2 x H. rewrite H. reflexivity.
+Qed.
+
 Theorem combine_split : forall X Y (l : list (X * Y)) l1 l2,
   split l = (l1, l2) ->
   combine l1 l2 = l.
 Proof.
-  (* FILL IN HERE *) Admitted.
-(** [] *)
+  intros X Y l. induction l.
+  - destruct l1.
+    + reflexivity.
+    + intros l2 H. discriminate H.
+  - intros l1 l2 H. destruct l1.
+    + destruct l2.
+      * simpl in H. destruct x. destruct (split l). discriminate H.
+      * simpl in H. destruct x. destruct (split l). discriminate H.
+    + destruct l2.
+      * simpl in H. destruct x. destruct (split l). discriminate H.
+      * simpl in H. destruct x. destruct (split l). simpl.
+        injection H as eq1 eq2 eq3 eq4. rewrite eq1. rewrite eq3.
+        apply list_cons_eq. apply IHl. rewrite eq2. rewrite eq4. reflexivity.
+Qed.
+
 
 (** The [eqn:] part of the [destruct] tactic is optional: We've chosen
     to include it most of the time, just for the sake of
