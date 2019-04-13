@@ -74,7 +74,9 @@ Theorem silly_ex :
      oddb 3 = true ->
      evenb 4 = true.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros eq1 eq2. apply eq2.
+Qed.
+
 (** [] *)
 
 (** To use the [apply] tactic, the (conclusion of the) fact
@@ -107,7 +109,8 @@ Theorem rev_exercise1 : forall (l l' : list nat),
      l = rev l' ->
      l' = rev l.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros l l' H. rewrite H. symmetry. apply rev_involutive.
+Qed.
 (** [] *)
 
 (** **** Exercise: 1 star, standard, optional (apply_rewrite)  
@@ -116,7 +119,9 @@ Proof.
     [rewrite].  What are the situations where both can usefully be
     applied? *)
 
-(* FILL IN HERE 
+(* rewrite는 단순 치환이므로 시행 후 따로 reflexivity를 입증해야 할 필요가 있지만
+   apply는 이미 참이라 가정된 전건이나 정리와 동일한 형태임을 보임으로써 이를 생략한다.
+   때문에 전제를 이용하여 단순 치환을 통해 등식이 성립됨을 보이는 경우에 둘다 사용 가능한 것 같다.
 
     [] *)
 
