@@ -1019,7 +1019,18 @@ Theorem bool_fn_applied_thrice :
   forall (f : bool -> bool) (b : bool),
   f (f (f b)) = f b.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros f b. destruct b eqn:E.
+  - destruct (f true) eqn:E1.
+    + rewrite E1. apply E1.
+    + destruct (f false) eqn:E1'.
+      * apply E1.
+      * apply E1'.
+  - destruct (f false) eqn:E2.
+    + destruct (f true) eqn:E2'.
+      * apply E2'.
+      * apply E2.
+    + rewrite E2. apply E2.
+Qed.
 (** [] *)
 
 (* ################################################################# *)
