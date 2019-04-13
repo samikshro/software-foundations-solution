@@ -1154,14 +1154,40 @@ Qed.
     things than necessary.  Hint: what property do you need of [l1]
     and [l2] for [split (combine l1 l2) = (l1,l2)] to be true?) *)
 
-Definition split_combine_statement : Prop
-  (* ("[: Prop]" means that we are giving a name to a
-     logical proposition here.) *)
-  (* REPLACE THIS LINE WITH ":= _your_definition_ ." *). Admitted.
+Definition split_combine_statement : Prop :=
+  forall X Y (l : list (X * Y)) (l1 : list X) (l2 : list Y),
+  length l1 = length l2 ->
+  combine l1 l2 = l -> split l = (l1, l2).
+
+Lemma prod_list_cons : forall X Y (x : X) (y : Y) l1 l2 l3 l4,
+  (l1, l2) = (l3, l4) -> (x :: l1, y :: l2) = (x :: l3, y :: l4).
+Proof.
+  intros X Y x y l1 l2 l3 l4 H.
+  injection H as eq1 eq2. rewrite eq1. rewrite eq2. reflexivity.
+Qed.
 
 Theorem split_combine : split_combine_statement.
 Proof.
-(* FILL IN HERE *) Admitted.
+  intros X Y l. induction l.
+  - intros l1 l2 H H2. destruct l1.
+    + destruct l2.
+      * reflexivity.
+      * discriminate H.
+    + destruct l2.
+      * discriminate H.
+      * discriminate H2.
+  - intros l1 l2 H H2. destruct l1.
+    + destruct l2.
+      * discriminate H2.
+      * discriminate H.
+    + destruct l2.
+      * discriminate H.
+      * simpl. destruct x. destruct (split l).
+        injection H2 as eq1 eq2 H2'. rewrite eq1. rewrite eq2.
+        apply prod_list_cons. apply IHl. injection H.
+        -- intros TH. apply TH.
+        -- apply H2'.
+Qed.
 
 (* Do not modify the following line: *)
 Definition manual_grade_for_split_combine : option (nat*string) := None.
