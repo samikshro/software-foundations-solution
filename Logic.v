@@ -1320,13 +1320,24 @@ Proof.
   - simpl. apply IHk'.
 Qed.
 
+Theorem evenb_S_double : forall k, evenb (S (double k)) = false.
+Proof.
+  intros k. induction k as [|k' IHk'].
+  - reflexivity.
+  - apply IHk'.
+Qed.
+
 (** **** Exercise: 3 stars, standard (evenb_double_conv)  *)
 Theorem evenb_double_conv : forall n,
   exists k, n = if evenb n then double k
                 else S (double k).
 Proof.
-  (* Hint: Use the [evenb_S] lemma from [Induction.v]. *)
-  (* FILL IN HERE *) Admitted.
+  intros n. induction n.
+  - simpl. exists 0. reflexivity.
+  - destruct IHn. destruct (evenb n) eqn:E in H.
+    + rewrite H. rewrite evenb_S_double. exists x. reflexivity.
+    + rewrite H. simpl. rewrite evenb_double. exists (S x). reflexivity.
+Qed.
 (** [] *)
 
 Theorem even_bool_prop : forall n,
