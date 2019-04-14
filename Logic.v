@@ -1272,8 +1272,22 @@ Definition tr_rev {X} (l : list X) : list X :=
     call); a decent compiler will generate very efficient code in this
     case.  Prove that the two definitions are indeed equivalent. *)
 
+Lemma rev_append_app : forall X (l1 l2 : list X),
+  rev_append l1 l2 = rev l1 ++ l2.
+Proof.
+  intros X l1. induction l1.
+  - reflexivity.
+  - intros l2. destruct l2.
+    + simpl. rewrite IHl1. rewrite <- app_assoc. reflexivity.
+    + simpl. rewrite IHl1. rewrite <- app_assoc. reflexivity.
+Qed.
+
 Lemma tr_rev_correct : forall X, @tr_rev X = @rev X.
-(* FILL IN HERE *) Admitted.
+Proof.
+  intros x. apply functional_extensionality.
+  intros l. unfold tr_rev. rewrite rev_append_app. apply app_nil_r with (l:=rev l).
+Qed.
+
 (** [] *)
 
 (* ================================================================= *)
