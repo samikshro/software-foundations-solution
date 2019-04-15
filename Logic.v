@@ -1328,7 +1328,20 @@ Proof.
 Qed.
 
 (** **** Exercise: 3 stars, standard (evenb_double_conv)  *)
+(* using evenb_S. without evenb_S_double. *)
 Theorem evenb_double_conv : forall n,
+  exists k, n = if evenb n then double k
+                else S (double k).
+Proof.
+  intros n. induction n.
+  - exists 0. reflexivity.
+  - rewrite evenb_S. destruct (evenb n) eqn:E.
+    + destruct IHn as [k']. rewrite H. exists k'. reflexivity.
+    + destruct IHn as [k']. rewrite H. exists (S k'). reflexivity.
+Qed.
+
+(* using evenb_double & evenb_S_double. without evenb_S. *)
+Theorem evenb_double_conv' : forall n,
   exists k, n = if evenb n then double k
                 else S (double k).
 Proof.
