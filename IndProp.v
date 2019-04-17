@@ -519,7 +519,17 @@ Qed.
 Theorem ev_plus_plus : forall n m p,
   even (n+m) -> even (n+p) -> even (m+p).
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros n m p Hnm Hnp.
+  apply (ev_sum (n+m) (n+p)) in Hnm.
+  - rewrite plus_assoc in Hnm.
+    assert (T: n + m + n = n + n + m). { rewrite plus_comm. rewrite plus_assoc. reflexivity. }
+    rewrite T in Hnm. rewrite <- plus_assoc in Hnm.
+    apply (ev_ev__ev (n+n) (m+p)) in Hnm.
+    + apply Hnm.
+    + rewrite <- double_plus. apply ev_double.
+  - apply Hnp.
+Qed.
+
 (** [] *)
 
 (* ################################################################# *)
