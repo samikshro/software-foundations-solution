@@ -1583,7 +1583,8 @@ Proof.
     + discriminate H.
   - intros l2 H. destruct l2.
     + discriminate H.
-    + Abort.
+    + injection H. intros J K. rewrite J. rewrite K. reflexivity.
+Qed.
 
 Lemma eqb_list_true_iff :
   forall A (eqb : A -> A -> bool),
