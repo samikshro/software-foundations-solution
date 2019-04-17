@@ -1508,12 +1508,34 @@ Qed.
 Lemma andb_true_iff : forall b1 b2:bool,
   b1 && b2 = true <-> b1 = true /\ b2 = true.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  split.
+  - intros H. rewrite <- H. split.
+    + destruct b2.
+      * rewrite andb_commutative. reflexivity.
+      * rewrite andb_commutative in H. discriminate H.
+    + destruct b1.
+      * reflexivity.
+      * discriminate H.
+  - intros [H1 H2]. rewrite H1. rewrite H2. reflexivity.
+Qed.
 
 Lemma orb_true_iff : forall b1 b2,
   b1 || b2 = true <-> b1 = true \/ b2 = true.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  split.
+  - intros H. rewrite <- H. unfold orb. destruct b2.
+    + destruct b1.
+      * left. reflexivity.
+      * right. reflexivity.
+    + destruct b1.
+      * left. reflexivity.
+      * left. reflexivity.
+  - intros [H1 | H2].
+    + rewrite H1. reflexivity.
+    + rewrite H2. destruct b1.
+      * reflexivity.
+      * reflexivity.
+Qed.
 (** [] *)
 
 (** **** Exercise: 1 star, standard (eqb_neq)  
