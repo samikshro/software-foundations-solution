@@ -1547,7 +1547,13 @@ Qed.
 Theorem eqb_neq : forall x y : nat,
   x =? y = false <-> x <> y.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  split.
+  - intros H. unfold not. intros H'.
+    rewrite H' in H. rewrite <- eqb_refl in H. discriminate H.
+  - intros H. destruct (x =? y) eqn:E.
+    + rewrite eqb_eq in E. rewrite E in H. destruct H. reflexivity.
+    + reflexivity.
+Qed.
 (** [] *)
 
 (** **** Exercise: 3 stars, standard (eqb_list)  
