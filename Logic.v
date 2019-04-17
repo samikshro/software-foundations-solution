@@ -1630,12 +1630,26 @@ Fixpoint forallb {X : Type} (test : X -> bool) (l : list X) : bool :=
 Theorem forallb_true_iff : forall X test (l : list X),
    forallb test l = true <-> All (fun x => test x = true) l.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros X test l. split.
+  - intros H. induction l.
+    + reflexivity.
+    + simpl in H. rewrite andb_true_iff in H. destruct H as [Hl Hr].
+      apply IHl in Hr. simpl. split.
+      * apply Hl.
+      * apply Hr.
+  - intros H. induction l.
+    + reflexivity.
+    + simpl in H. destruct H as [Hl Hr]. apply IHl in Hr. simpl.
+      rewrite Hl. rewrite Hr. reflexivity.
+Qed.
 
 (** Are there any important properties of the function [forallb] which
     are not captured by this specification? *)
 
-(* FILL IN HERE 
+(* forallb는 중간에 test x = false를 만족하는 x가 나오면 andb의 정의에 의해 즉각
+   재귀가 중단된다. 때문에 그 뒤에 나오는 엘리먼트들에 대한 test값을 알 수가 없다.
+   그러나 All은 필연적으로 리스트의 모든 엘리먼트들에 대한 test값을 밝힌다.
+   중간에 중단되지 않는 점에서 All이 forallb가 갖는 모든 성질과 동등하다고는 볼 수 없다.
 
     [] *)
 
