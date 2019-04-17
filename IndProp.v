@@ -504,7 +504,10 @@ Qed.
 Theorem ev_ev__ev : forall n m,
   even (n+m) -> even n -> even m.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros n m Hnm Hn. induction Hn.
+  - apply Hnm.
+  - apply IHHn. inversion Hnm. apply H0.
+Qed.
 (** [] *)
 
 (** **** Exercise: 3 stars, standard, optional (ev_plus_plus)  
