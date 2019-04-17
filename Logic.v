@@ -1577,14 +1577,7 @@ Fixpoint eqb_list {A : Type} (eqb : A -> A -> bool)
 Lemma list_cons_eq_inv : forall X (x : X) (l1 l2 : list X),
   x :: l1 = x :: l2 -> l1 = l2.
 Proof.
-  intros X x l1. induction l1 as [| h1 t1 IHl1].
-  - intros l2 H. destruct l2.
-    + reflexivity.
-    + discriminate H.
-  - intros l2 H. destruct l2.
-    + discriminate H.
-    + injection H. intros J K. rewrite J. rewrite K. reflexivity.
-Qed.
+  intros X x l1 l2 H. injection H. intros H'. apply H'.
 
 Lemma eqb_list_true_iff :
   forall A (eqb : A -> A -> bool),
