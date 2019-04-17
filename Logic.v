@@ -1836,8 +1836,50 @@ Definition de_morgan_not_and_not := forall P Q:Prop,
 Definition implies_to_or := forall P Q:Prop,
   (P->Q) -> (~P\/Q).
 
-(* FILL IN HERE 
+Theorem exc_mid_peirce : forall (P Q: Prop),
+  excluded_middle <-> peirce.
+Proof.
+  intros P Q. unfold excluded_middle. unfold peirce. split.
+  - intros H p q. intros J. destruct H with (P:=p).
+    + apply H0.
+    + apply J. intros Hp. unfold not in H0. apply H0 in Hp. destruct Hp.
+  - intros H p. apply H with (Q:=~(p \/ ~p)). unfold not. intros J.
+    right. intros Hp. apply J.
+    + left. apply Hp.
+    + left. apply Hp.
+Qed.
 
-    [] *)
+Theorem exc_mid_double_neg : forall (P: Prop),
+  excluded_middle <-> double_negation_elimination.
+Proof.
+  intros P. unfold excluded_middle. unfold double_negation_elimination. split.
+  - intros H p Hnnp. unfold not in Hnnp. destruct H with (P:=p).
+    + apply H0.
+    + unfold not in H0. apply Hnnp in H0. destruct H0.
+  - intros H p. apply H. unfold not. intros H'.
+    apply H'. right. intros Hp. apply H'. left. apply Hp.
+Qed.
+
+Theorem exc_mid_de_morgan : forall (P Q: Prop),
+  excluded_middle <-> de_morgan_not_and_not.
+Proof.
+  intros P Q. unfold excluded_middle. unfold de_morgan_not_and_not. split.
+  - intros H p q. unfold not. intros J. destruct H with (P:=(p\/q)).
+    + apply H0.
+    + unfold not in H0. exfalso. apply J. split.
+      * intros Hp. apply H0. left. apply Hp.
+      * intros Hq. apply H0. right. apply Hq.
+  - intros H p. apply H. unfold not. intros [J K]. apply K. apply J.
+Qed.
+
+Theorem exc_mid_implies_to_or : forall (P Q: Prop),
+  excluded_middle <-> implies_to_or.
+Proof.
+  intros P Q. unfold excluded_middle. unfold implies_to_or. split.
+  - intros H p q J. destruct H with (P:=p).
+    + right. apply J. apply H0.
+    + left. apply H0.
+  - intros H p. apply or_comm. apply H. intros Hp. apply Hp.
+Qed.
 
 (* Wed Jan 9 12:02:45 EST 2019 *)
