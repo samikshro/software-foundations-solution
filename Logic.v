@@ -1805,7 +1805,11 @@ Theorem not_exists_dist :
   forall (X:Type) (P : X -> Prop),
     ~ (exists x, ~ P x) -> (forall x, P x).
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros EM X P H a. destruct EM with (P:=(P a)).
+  - apply H0.
+  - unfold not in H. destruct H. unfold not in H0. exists a. apply H0.
+Qed.
+
 (** [] *)
 
 (** **** Exercise: 5 stars, standard, optional (classical_axioms)  
