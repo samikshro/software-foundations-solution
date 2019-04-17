@@ -1565,15 +1565,52 @@ Qed.
     definition is correct, prove the lemma [eqb_list_true_iff]. *)
 
 Fixpoint eqb_list {A : Type} (eqb : A -> A -> bool)
-                  (l1 l2 : list A) : bool
-  (* REPLACE THIS LINE WITH ":= _your_definition_ ." *). Admitted.
+                  (l1 l2 : list A) : bool :=
+  match (l1, l2) with
+  | ([], []) => true
+  | ([], _) => false
+  | (_, []) => false
+  | (h :: t, h' :: t') => if eqb h h' then eqb_list eqb t t'
+                          else false
+  end.
+
+Lemma list_cons_eq_inv : forall X (x : X) (l1 l2 : list X),
+  x :: l1 = x :: l2 -> l1 = l2.
+Proof.
+  intros X x l1. induction l1 as [| h1 t1 IHl1].
+  - intros l2 H. destruct l2.
+    + reflexivity.
+    + discriminate H.
+  - intros l2 H. destruct l2.
+    + discriminate H.
+    + Abort.
 
 Lemma eqb_list_true_iff :
   forall A (eqb : A -> A -> bool),
     (forall a1 a2, eqb a1 a2 = true <-> a1 = a2) ->
     forall l1 l2, eqb_list eqb l1 l2 = true <-> l1 = l2.
 Proof.
-(* FILL IN HERE *) Admitted.
+  intros A eqb H l1. induction l1.
+  - intros l2. split.
+    + intros H'. destruct l2.
+      * reflexivity.
+      * discriminate H'.
+    + intros H'. destruct l2.
+      * reflexivity.
+      * discriminate H'.
+  - intros l2. split.
+    + intros H'. destruct l2.
+      * discriminate H'.
+      * simpl in H'. destruct (eqb x x0) eqn:E in H'.
+        -- apply H in E. rewrite E. apply IHl1 in H'. rewrite H'. reflexivity.
+        -- discriminate H'.
+    + intros H'. destruct l2.
+      * discriminate H'.
+      * rewrite <- H'. simpl. destruct (eqb x x) eqn: E.
+        -- apply IHl1. reflexivity.
+        -- assert (H'': x=x). { reflexivity. }
+           rewrite <- H in H''. rewrite H'' in E. discriminate E.
+Qed.
 (** [] *)
 
 (** **** Exercise: 2 stars, standard, recommended (All_forallb)  
