@@ -480,7 +480,20 @@ Inductive even' : nat -> Prop :=
 
 Theorem even'_ev : forall n, even' n <-> even n.
 Proof.
- (* FILL IN HERE *) Admitted.
+  intros n. split.
+  - intros H. induction H.
+    + apply ev_0.
+    + apply ev_SS. apply ev_0.
+    + apply ev_sum.
+      * apply IHeven'1.
+      * apply IHeven'2.
+  - intros H. induction H.
+    + apply even'_0.
+    + assert (H2: even' 2). { apply even'_2. }
+      apply (even'_sum 2 n) in H2.
+      * apply H2.
+      * apply IHeven.
+Qed.
 (** [] *)
 
 (** **** Exercise: 3 stars, advanced, recommended (ev_ev__ev)  
