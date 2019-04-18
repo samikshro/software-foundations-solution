@@ -1166,7 +1166,19 @@ Qed.
 Lemma reg_exp_of_list_spec : forall T (s1 s2 : list T),
   s1 =~ reg_exp_of_list s2 <-> s1 = s2.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros T s1 s2. split.
+  - generalize dependent s1. induction s2.
+    + intros s1 H. simpl in H. inversion H. reflexivity.
+    + intros s1 H. inversion H. inversion H3. simpl. apply list_cons_eq. apply IHs2. apply H4.
+  - generalize dependent s1. induction s2.
+    + intros s1 H. simpl. rewrite H. apply MEmpty.
+    + intros s1 H. simpl. rewrite H. replace (x :: s2) with ([x] ++ s2).
+      { apply MApp.
+        - apply MChar.
+        - apply IHs2. reflexivity. }
+      simpl. reflexivity.
+Qed.
+
 (** [] *)
 
 (** Since the definition of [exp_match] has a recursive
