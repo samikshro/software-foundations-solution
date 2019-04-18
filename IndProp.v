@@ -864,25 +864,41 @@ End R.
       Hint: choose your induction carefully! *)
 
 Inductive subseq : list nat -> list nat -> Prop :=
-(* FILL IN HERE *)
-.
+  | sub_nil : subseq [] []
+  | sub_cons (l1 l2 : list nat) (n : nat) (H: subseq l1 l2) : subseq l1 (n :: l2)
+  | sub_cons_cons (l1 l2 : list nat) (n : nat) (H: subseq l1 l2) : subseq (n :: l1) (n :: l2).
 
 Theorem subseq_refl : forall (l : list nat), subseq l l.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros l. induction l.
+  - apply sub_nil.
+  - apply sub_cons_cons. apply IHl.
+Qed.
 
 Theorem subseq_app : forall (l1 l2 l3 : list nat),
   subseq l1 l2 ->
   subseq l1 (l2 ++ l3).
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros l1 l2 l3 H. induction H.
+  - simpl. induction l3.
+    + apply sub_nil.
+    + apply sub_cons. apply IHl3.
+  - simpl. apply sub_cons. apply IHsubseq.
+  - simpl. apply sub_cons_cons. apply IHsubseq.
+Qed.
 
 Theorem subseq_trans : forall (l1 l2 l3 : list nat),
   subseq l1 l2 ->
   subseq l2 l3 ->
   subseq l1 l3.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros l1 l2 l3 H H'. generalize dependent l1. induction H'.
+  - intros l1 H. apply H.
+  - intros l0 H. apply sub_cons. apply IHH'. apply H.
+  - intros l0 H. inversion H.
+    + apply sub_cons. apply IHH'. apply H2.
+    + apply sub_cons_cons. apply IHH'. apply H2.
+Qed.
 (** [] *)
 
 (** **** Exercise: 2 stars, standard, optional (R_provability2)  
