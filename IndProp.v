@@ -618,18 +618,20 @@ Inductive next_even : nat -> nat -> Prop :=
     Define an inductive binary relation [total_relation] that holds
     between every pair of natural numbers. *)
 
-(* FILL IN HERE 
-
-    [] *)
+Inductive total_relation : nat -> nat -> Prop :=
+  | tr_0_0 : total_relation 0 0
+  | tr_Sn_m n m (H : total_relation n m) : total_relation (S n) m
+  | tr_n_Sm n m (H : total_relation n m) : total_relation n (S m).
 
 (** **** Exercise: 2 stars, standard, optional (empty_relation)  
 
     Define an inductive binary relation [empty_relation] (on numbers)
     that never holds. *)
 
-(* FILL IN HERE 
+Inductive empty_relation : nat -> nat -> Prop :=
+  | er_Sn_m n m (H : empty_relation n m) : empty_relation (S n) m
+  | er_n_Sm n m (H : empty_relation n m) : empty_relation n (S m).
 
-    [] *)
 
 (** From the definition of [le], we can sketch the behaviors of
     [destruct], [inversion], and [induction] on a hypothesis [H]
