@@ -1578,6 +1578,7 @@ Lemma list_cons_eq_inv : forall X (x : X) (l1 l2 : list X),
   x :: l1 = x :: l2 -> l1 = l2.
 Proof.
   intros X x l1 l2 H. injection H. intros H'. apply H'.
+Qed.
 
 Lemma eqb_list_true_iff :
   forall A (eqb : A -> A -> bool),
