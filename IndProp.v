@@ -1261,13 +1261,45 @@ Qed.
     regular expression matches some string. Prove that your function
     is correct. *)
 
-Fixpoint re_not_empty {T : Type} (re : @reg_exp T) : bool
-  (* REPLACE THIS LINE WITH ":= _your_definition_ ." *). Admitted.
+Fixpoint re_not_empty {T : Type} (re : @reg_exp T) : bool :=
+  match re with
+  | EmptySet => false
+  | EmptyStr => true
+  | Char t => true
+  | App r1 r2 => re_not_empty r1 && re_not_empty r2
+  | Union r1 r2 => re_not_empty r1 || re_not_empty r2
+  | Star r => true
+  end.
 
 Lemma re_not_empty_correct : forall T (re : @reg_exp T),
   (exists s, s =~ re) <-> re_not_empty re = true.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros T re. split.
+  - intros [s H]. induction H.
+    + reflexivity.
+    + reflexivity.
+    + simpl. rewrite IHexp_match1. rewrite IHexp_match2. reflexivity.
+    + simpl. rewrite IHexp_match. reflexivity.
+    + simpl. rewrite IHexp_match. destruct (re_not_empty re1).
+      * reflexivity.
+      * reflexivity.
+    + simpl. reflexivity.
+    + simpl. reflexivity.
+  - intros H. induction re.
+    + inversion H.
+    + exists []. apply MEmpty.
+    + exists [t]. apply MChar.
+    + inversion H. apply andb_true_iff in H1. destruct H1 as [Hl Hr].
+      apply IHre1 in Hl. apply IHre2 in Hr.
+      destruct Hl as [s1 Hl']. destruct Hr as [s2 Hr'].
+      exists (s1 ++ s2). apply MApp.
+      * apply Hl'.
+      * apply Hr'.
+    + inversion H. apply orb_true_iff in H1. destruct H1 as [Hl | Hr].
+      * apply IHre1 in Hl. destruct Hl as [s1 Hl']. exists s1. apply MUnionL. apply Hl'.
+      * apply IHre2 in Hr. destruct Hr as [s1 Hr']. exists s1. apply MUnionR. apply Hr'.
+    + exists []. apply MStar0.
+Qed.
 (** [] *)
 
 (* ================================================================= *)
