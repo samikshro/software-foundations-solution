@@ -779,18 +779,20 @@ Inductive R : nat -> nat -> nat -> Prop :=
    | c5 m n o (H : R m n o) : R n m o.
 
 (** - Which of the following propositions are provable?
-      - [R 1 1 2]
-      - [R 2 2 6]
+      - [R 1 1 2] => apply c2. apply c3. apply c1.
+      - [R 2 2 6] => X
 
     - If we dropped constructor [c5] from the definition of [R],
       would the set of provable propositions change?  Briefly (1
       sentence) explain your answer.
 
+      c2와 c3의 적용횟수를 바꾸는 것과 같으므로 집합은 바뀌지 않는다.
+
     - If we dropped constructor [c4] from the definition of [R],
       would the set of provable propositions change?  Briefly (1
       sentence) explain your answer.
 
-(* FILL IN HERE *)
+      일차종속이므로 집합은 바뀌지 않는다.
 *)
 
 (* Do not modify the following line: *)
