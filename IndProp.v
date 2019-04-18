@@ -912,13 +912,11 @@ Qed.
 
     Which of the following propositions are provable?
 
-    - [R 2 [1;0]]
-    - [R 1 [1;2;1;0]]
-    - [R 6 [3;2;1;0]]  *)
-
-(* FILL IN HERE 
-
-    [] *)
+    - [R 2 [1;0]] => apply c2. apply c2. apply c1.
+    - [R 1 [1;2;1;0]] => apply c3. apply c2. apply c3. apply c3.
+                         apply c2. apply c2. apply c2. apply c1.
+    - [R 6 [3;2;1;0]] => X
+*)
 
 (* ################################################################# *)
 (** * Case Study: Regular Expressions *)
