@@ -805,12 +805,23 @@ Definition manual_grade_for_R_provability : option (nat*string) := None.
     Figure out which function; then state and prove this equivalence
     in Coq? *)
 
-Definition fR : nat -> nat -> nat
-  (* REPLACE THIS LINE WITH ":= _your_definition_ ." *). Admitted.
+Definition fR : nat -> nat -> nat := plus.
 
 Theorem R_equiv_fR : forall m n o, R m n o <-> fR m n = o.
 Proof.
-(* FILL IN HERE *) Admitted.
+  intros m n o. split.
+  - intros H. unfold fR. induction H.
+    + reflexivity.
+    + simpl. rewrite IHR. reflexivity.
+    + rewrite <- plus_n_Sm. rewrite IHR. reflexivity.
+    + rewrite <- plus_n_Sm in IHR. simpl in IHR. injection IHR. intros H'. apply H'.
+    + rewrite plus_comm. apply IHR.
+  - unfold fR. generalize dependent o. induction m.
+    + induction n.
+      * intros o H. simpl in H. rewrite <- H. apply c1.
+      * intros o H. simpl in H. rewrite <- H. apply c3. apply IHn. reflexivity.
+    + intros o H. rewrite <- H. simpl. apply c2. apply IHm. reflexivity.
+Qed.
 (** [] *)
 
 End R.
