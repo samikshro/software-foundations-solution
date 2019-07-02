@@ -35,3 +35,6 @@ nra.cache
 
 # make generated files
 *.conf
+
+# mac
+.DS_Store
