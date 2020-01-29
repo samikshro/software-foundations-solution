@@ -303,9 +303,9 @@ Proof. reflexivity. Qed.
 Fixpoint oddmembers (l:natlist) : natlist :=
   match l with
   | nil => nil
-  | h :: t => match nat_to_bin h with
-              | B h' => h :: oddmembers t
-              | _ => oddmembers t
+  | h :: t => match oddb h with
+              | true => h :: oddmembers t
+              | false => oddmembers t
               end
   end.
 
@@ -418,22 +418,27 @@ Proof. reflexivity. Qed.
 
 Definition sum : bag -> bag -> bag := app.
 
-Example test_sum1:              count 1 (sum [1;2;3] [1;4;1]) = 3.
+Example test_sum1:
+  count 1 (sum [1;2;3] [1;4;1]) = 3.
 Proof. reflexivity. Qed.
 
 Definition add (v:nat) (s:bag) : bag := v :: s.
 
-Example test_add1:                count 1 (add 1 [1;4;1]) = 3.
+Example test_add1:
+  count 1 (add 1 [1;4;1]) = 3.
 Proof. reflexivity. Qed.
-Example test_add2:                count 5 (add 1 [1;4;1]) = 0.
+Example test_add2:
+  count 5 (add 1 [1;4;1]) = 0.
 Proof. reflexivity. Qed.
 
 Definition member (v:nat) (s:bag) : bool := 1 <=? count v s.
 
-Example test_member1:             member 1 [1;4;1] = true.
+Example test_member1:
+  member 1 [1;4;1] = true.
 Proof. reflexivity. Qed.
 
-Example test_member2:             member 2 [1;4;1] = false.
+Example test_member2:
+  member 2 [1;4;1] = false.
 Proof. reflexivity. Qed.
 (** [] *)
 
@@ -451,7 +456,7 @@ Fixpoint remove_one (v:nat) (s:bag) : bag :=
   match s with
   | nil => nil
   | h :: t => if h =? v then t
-              else h :: remove_one v t
+            else h :: remove_one v t
   end.
 
 Example test_remove_one1:
@@ -477,25 +482,31 @@ Fixpoint remove_all (v:nat) (s:bag) : bag :=
               else h :: remove_all v t
   end.
 
-Example test_remove_all1:  count 5 (remove_all 5 [2;1;5;4;1]) = 0.
+Example test_remove_all1:
+  count 5 (remove_all 5 [2;1;5;4;1]) = 0.
 Proof. reflexivity. Qed.
-Example test_remove_all2:  count 5 (remove_all 5 [2;1;4;1]) = 0.
+Example test_remove_all2:
+  count 5 (remove_all 5 [2;1;4;1]) = 0.
 Proof. reflexivity. Qed.
-Example test_remove_all3:  count 4 (remove_all 5 [2;1;4;5;1;4]) = 2.
+Example test_remove_all3:
+  count 4 (remove_all 5 [2;1;4;5;1;4]) = 2.
 Proof. reflexivity. Qed.
-Example test_remove_all4:  count 5 (remove_all 5 [2;1;5;4;5;1;4;5;1;4]) = 0.
+Example test_remove_all4:
+  count 5 (remove_all 5 [2;1;5;4;5;1;4;5;1;4]) = 0.
 Proof. reflexivity. Qed.
 
 Fixpoint subset (s1:bag) (s2:bag) : bool :=
   match s1 with
   | nil => true
   | h :: t => if member h s2 then subset t (remove_one h s2)
-              else false
+            else false
   end.
 
-Example test_subset1:              subset [1;2] [2;1;4;1] = true.
+Example test_subset1:
+  subset [1;2] [2;1;4;1] = true.
 Proof. reflexivity. Qed.
-Example test_subset2:              subset [1;2;2] [2;1;4;1] = false.
+Example test_subset2:
+  subset [1;2;2] [2;1;4;1] = false.
 Proof. reflexivity. Qed.
 (** [] *)
 
@@ -513,16 +524,9 @@ Theorem incr_nat_add_count : forall n k:nat, forall s:bag,
   count n s = k -> count n (add n s) = k + 1.
 Proof.
   intros n k s. induction s as [| h].
-  - intros H. destruct n.
-    + simpl. rewrite <- H. reflexivity.
-    + simpl. rewrite <- H. rewrite <- eqb_refl. reflexivity.
-  - destruct n.
-    + simpl. intros H. destruct (h =? 0).
-      * rewrite H. rewrite plus_comm. reflexivity.
-      * rewrite H. rewrite plus_comm. reflexivity.
-    + simpl. intros H. rewrite <- eqb_refl. destruct (h =? S n).
-      * rewrite H. rewrite plus_comm. reflexivity.
-      * rewrite H. rewrite plus_comm. reflexivity.
+  - simpl. intros H. rewrite <- eqb_refl. rewrite <- H. reflexivity.
+  - simpl. rewrite <- eqb_refl. intros H.
+    rewrite H. rewrite plus_comm. reflexivity.
 Qed.
 
 
@@ -870,9 +874,9 @@ Theorem rev_involutive : forall l : natlist,
 Proof.
   intros l. induction l as [| n l' IHl'].
   - reflexivity.
-  - simpl. replace ([n]) with (rev [n]).
-    { rewrite rev_app_distr. simpl. rewrite IHl'. reflexivity. }
-    reflexivity.
+  - simpl. assert ([n] = rev [n]).
+    { reflexivity. }
+    rewrite rev_app_distr. simpl. rewrite IHl'. reflexivity.
 Qed.
 
 (** There is a short solution to the next one.  If you find yourself
@@ -892,9 +896,9 @@ Lemma nonzeros_app : forall l1 l2 : natlist,
 Proof.
   intros l1 l2. induction l1 as [| n l' IHl'].
   - reflexivity.
-  - simpl. destruct n.
-    + simpl. rewrite IHl'. reflexivity.
-    + simpl. rewrite IHl'. reflexivity.
+  - simpl. destruct (n =? 0).
+    + rewrite IHl'. reflexivity.
+    + rewrite IHl'. reflexivity.
 Qed.
 (** [] *)
 
@@ -907,7 +911,8 @@ Qed.
 Fixpoint eqblist (l1 l2 : natlist) : bool :=
   match l1, l2 with
   | nil   , nil      => true
-  | h :: t, h' :: t' => if h =? h' then eqblist t t' else false
+  | h :: t , h' :: t'  => if h =? h' then eqblist t t'
+                       else false
   | _     , _        => false
   end.
 
@@ -980,18 +985,10 @@ Theorem bag_count_sum_split : forall n, forall s1 s2:bag,
   count n (sum s1 s2) = count n s1 + count n s2.
 Proof.
   intros n s1 s2. induction s1 as [| s' l' IHl'].
-  - destruct n.
-    + reflexivity.
-    + reflexivity.
-  - destruct n.
-    + simpl. destruct s'.
-      * simpl. rewrite IHl'. reflexivity.
-      * simpl. rewrite IHl'. reflexivity.
-    + simpl. destruct s'.
-      * simpl. rewrite IHl'. reflexivity.
-      * simpl. rewrite IHl'. destruct (s' =? n).
-        -- reflexivity.
-        -- reflexivity.
+  - reflexivity.
+  - simpl. destruct (s' =? n).
+    + rewrite IHl'. reflexivity.
+    + rewrite IHl'. reflexivity.
 Qed.
 
 (** **** Exercise: 4 stars, advanced (rev_injective)  
@@ -1005,10 +1002,11 @@ Qed.
 Theorem rev_injective : forall l1 l2 : natlist,
   rev l1 = rev l2 -> l1 = l2.
 Proof.
-  intros l1 l2 H. assert (H': rev l1 = rev l2 -> rev (rev l1) = rev (rev l2)).
-  { intros H2. rewrite H2. reflexivity. }
-  apply H' in H. rewrite rev_involutive in H. rewrite rev_involutive in H.
-  rewrite H. reflexivity.
+  intros l1 l2 H.
+  assert (H': rev (rev l1) = rev (rev l2)).
+  { rewrite H. reflexivity. }
+  rewrite rev_involutive in H'. rewrite rev_involutive in H'.
+  rewrite H'. reflexivity.
 Qed.
 
 (* Do not modify the following line: *)
@@ -1027,9 +1025,9 @@ Fixpoint nth_bad (l:natlist) (n:nat) : nat :=
   match l with
   | nil => 42  (* arbitrary! *)
   | a :: l' => match n =? O with
-               | true => a
-               | false => nth_bad l' (pred n)
-               end
+             | true => a
+             | false => nth_bad l' (pred n)
+             end
   end.
 
 (** This solution is not so good: If [nth_bad] returns [42], we
@@ -1052,9 +1050,9 @@ Fixpoint nth_error (l:natlist) (n:nat) : natoption :=
   match l with
   | nil => None
   | a :: l' => match n =? O with
-               | true => Some a
-               | false => nth_error l' (pred n)
-               end
+             | true => Some a
+             | false => nth_error l' (pred n)
+             end
   end.
 
 Example test_nth_error1 : nth_error [4;5;6;7] 0 = Some 4.
@@ -1159,8 +1157,8 @@ Definition eqb_id (x1 x2 : id) :=
 
 (** **** Exercise: 1 star, standard (eqb_id_refl)  *)
 Theorem eqb_id_refl : forall x, true = eqb_id x x.
-Proof. intros x. destruct x.
-  - simpl. rewrite <- eqb_refl. reflexivity.
+Proof.
+  intros x. destruct x. simpl. rewrite <- eqb_refl. reflexivity.
 Qed.
 (** [] *)
 
