@@ -655,11 +655,11 @@ Proof. reflexivity.  Qed.
     those elements for which the predicate returns [true]. *)
 
 Fixpoint filter {X:Type} (test: X->bool) (l:list X)
-                : (list X) :=
+  : (list X) :=
   match l with
-  | []     => []
+  | [] => []
   | h :: t => if test h then h :: (filter test t)
-                        else       filter test t
+            else filter test t
   end.
 
 (** For example, if we apply [filter] to the predicate [evenb]
@@ -673,8 +673,8 @@ Definition length_is_1 {X : Type} (l : list X) : bool :=
   (length l) =? 1.
 
 Example test_filter2:
-    filter length_is_1
-           [ [1; 2]; [3]; [4]; [5;6;7]; []; [8] ]
+  filter length_is_1
+         [ [1; 2]; [3]; [4]; [5;6;7]; []; [8] ]
   = [ [3]; [4]; [8] ].
 Proof. reflexivity.  Qed.
 
@@ -684,11 +684,14 @@ Proof. reflexivity.  Qed.
 Definition countoddmembers' (l:list nat) : nat :=
   length (filter oddb l).
 
-Example test_countoddmembers'1:   countoddmembers' [1;0;3;1;4;5] = 4.
+Example test_countoddmembers'1:
+  countoddmembers' [1;0;3;1;4;5] = 4.
 Proof. reflexivity.  Qed.
-Example test_countoddmembers'2:   countoddmembers' [0;2;4] = 0.
+Example test_countoddmembers'2:
+  countoddmembers' [0;2;4] = 0.
 Proof. reflexivity.  Qed.
-Example test_countoddmembers'3:   countoddmembers' nil = 0.
+Example test_countoddmembers'3:
+  countoddmembers' nil = 0.
 Proof. reflexivity.  Qed.
 
 (* ================================================================= *)
@@ -776,7 +779,7 @@ Proof. reflexivity. Qed.
 
 Fixpoint map {X Y: Type} (f:X->Y) (l:list X) : (list Y) :=
   match l with
-  | []     => []
+  | [] => []
   | h :: t => (f h) :: (map f t)
   end.
 
@@ -801,7 +804,7 @@ Proof. reflexivity.  Qed.
     yield a _list of lists_ of booleans: *)
 
 Example test_map3:
-    map (fun n => [evenb n;oddb n]) [2;1;2;5]
+  map (fun n => [evenb n;oddb n]) [2;1;2;5]
   = [[true;false];[false;true];[true;false];[false;true]].
 Proof. reflexivity.  Qed.
 
@@ -935,37 +938,37 @@ Proof. reflexivity. Qed.
   eg2: 아래와 같이 활용할 수 있다. *)
 
 Inductive dir : Type :=
-  | Up
-  | Right
-  | Down
-  | Left.
+| Up
+| Right
+| Down
+| Left.
 
 Inductive dir_cmd : Type :=
-  | Clockwise
-  | Counterclockwise
-  | Reverse
-  | Stay.
+| Clockwise
+| Counterclockwise
+| Reverse
+| Stay.
 
 Definition instruct_dir (c:dir_cmd) (d:dir) : dir :=
   match c with
   | Clockwise => match d with
-                 | Up => Right
-                 | Right => Down
-                 | Down => Left
-                 | Left => Up
-                 end
+                | Up => Right
+                | Right => Down
+                | Down => Left
+                | Left => Up
+                end
   | Counterclockwise => match d with
-                        | Up => Left
-                        | Right => Up
-                        | Down => Right
-                        | Left => Down
-                        end
+                       | Up => Left
+                       | Right => Up
+                       | Down => Right
+                       | Left => Down
+                       end
   | Reverse => match d with
-               | Up => Down
-               | Right => Left
-               | Down => Up
-               | Left => Right
-               end
+              | Up => Down
+              | Right => Left
+              | Down => Up
+              | Left => Right
+              end
   | Stay => d
   end.
 
@@ -1143,8 +1146,7 @@ Theorem curry_uncurry : forall (X Y Z : Type)
                         (f : (X * Y) -> Z) (p : X * Y),
   prod_uncurry (prod_curry f) p = f p.
 Proof.
-  intros X Y Z f p. destruct p.
-  - reflexivity.
+  intros X Y Z f p. destruct p. reflexivity.
 Qed.
 (** [] *)
 
